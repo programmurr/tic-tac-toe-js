@@ -1,9 +1,3 @@
-// store the gameboard as an array inside of a Gameboard object (gameBoard module)
-// players will be stored in objects
-// object to control the flow of the game
-// displayController module
-// player factory
-
 const gameBoard = (function(player) {
 	let cells = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
 	const winningCombos = [
@@ -21,12 +15,11 @@ const gameBoard = (function(player) {
 	const boardCells = Array.from(document.querySelectorAll('.cell'));
 
 	// bind events
-	for (let i = 0; i < boardCells.length - 1; i++) {
-		boardCells[i].addEventListener('click', takeCell(player));
+	for (let i = 0; i < boardCells.length; i++) {
+		boardCells[i].addEventListener('click', takeCell);
 	}
 
 	_setupBoard();
-	_render();
 
 	function _setupBoard() {
 		for (let i = 0; i < boardCells.length; i++) {
@@ -34,16 +27,17 @@ const gameBoard = (function(player) {
 		}
 	}
 
-	function _render() {
-		// refresh board
-		// emit board changed event
+	function takeCell() {
+		this.textContent = gameController.activePlayer.playerPiece;
+		gameObserver.notifyObservers();
 	}
 
-	function takeCell(player) {
-		// console.log(player);
-		// console.log(this);
-		this.textContent = player.playerPiece;
+	function update(self) {
+		console.log(`${self} 'updated'`);
+		//
 	}
 
-	return { boardCells };
-})(gameController.activePlayer);
+	return { boardCells, update };
+})();
+
+gameObserver.addObserver(gameBoard);
