@@ -1,6 +1,6 @@
-const gameBoard = (function(player) {
+const gameBoard = (function() {
 	let cells = [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
-	const winningCombos = [
+	let winningCombos = [
 		[ 1, 2, 3 ],
 		[ 4, 5, 6 ],
 		[ 7, 8, 9 ],
@@ -27,11 +27,15 @@ const gameBoard = (function(player) {
 		}
 	}
 
+	function _refreshDisplay(cell) {
+		cell.textContent = gameController.activePlayer.playerPiece; // demeter
+	}
+
 	function takeCell() {
 		if (this.textContent === 'X' || this.textContent === 'O') {
 			alert("You can't do that!");
 		} else {
-			this.textContent = gameController.activePlayer.playerPiece;
+			_refreshDisplay(this);
 			gameObserver.notifyObservers(this);
 		}
 	}
@@ -48,13 +52,55 @@ const gameBoard = (function(player) {
 		});
 	}
 
-	function update(self, cell) {
-		updateWinCombos(self, cell);
-		// win check - scan all win combos - if all are same piece then active player is winner
-		// draw check - scan board - if no integers left - draw
+	function updateCells(self, clickedCell) {
+		const cellIdNumber = parseInt(clickedCell.id);
+		const index = self.cells.indexOf(cellIdNumber);
+		self.cells.splice(index, 1);
 	}
 
-	return { boardCells, winningCombos, update };
+	function checkOWinner(cell) {
+		return cell === 'O';
+	}
+
+	function checkXWinner(cell) {
+		return cell === 'X';
+	}
+
+	function winCheck(self) {
+		let winCombo = [];
+		for (let i = 0; i < self.winningCombos.length; i++) {
+			if (self.winningCombos[i].every(checkXWinner) || self.winningCombos[i].every(checkOWinner)) {
+				winCombo.push(self.winningCombos[i]);
+				return winCombo;
+			}
+		}
+	}
+
+	function drawCheck(self) {
+		if (self.cells.length === 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function update(self, cell) {
+		updateWinCombos(self, cell);
+		updateCells(self, cell);
+		if (typeof winCheck(self) === 'object') {
+			alert(`${gameController.activePlayer.playerName} is the winner!`); // demeter
+		} else if (drawCheck(self)) {
+			alert("It's a draw!");
+		}
+	}
+
+	return { cells, boardCells, winningCombos, update };
 })();
 
 gameObserver.addObserver(gameBoard);
+
+// refresh display when game is a win/draw (now it only refreshes AFTER the alert)
+// Let players enter their names
+// Store name in local storage
+// Keep track of score?
+// Tidy up code - remove demeter violations
