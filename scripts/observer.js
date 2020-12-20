@@ -13,9 +13,9 @@ const Observers = () => {
 		return observers;
 	}
 
-	function notifyObservers() {
+	function notifyObservers(cell) {
 		observers.forEach(function(observer) {
-			observer.update(observer);
+			observer.update(observer, cell);
 		});
 	}
 

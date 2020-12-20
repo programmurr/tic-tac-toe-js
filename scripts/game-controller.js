@@ -6,7 +6,7 @@ const gameController = (function(player1, player2) {
 		[ self.activePlayer, self.nextPlayer ] = [ self.nextPlayer, self.activePlayer ];
 	}
 
-	function update(self) {
+	function update(self, _cell) {
 		switchPlayer(self);
 	}
 

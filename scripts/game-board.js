@@ -14,7 +14,7 @@ const gameBoard = (function(player) {
 	// cache DOM
 	const boardCells = Array.from(document.querySelectorAll('.cell'));
 
-	// bind events
+	// bind click events to cells
 	for (let i = 0; i < boardCells.length; i++) {
 		boardCells[i].addEventListener('click', takeCell);
 	}
@@ -28,16 +28,33 @@ const gameBoard = (function(player) {
 	}
 
 	function takeCell() {
-		this.textContent = gameController.activePlayer.playerPiece;
-		gameObserver.notifyObservers();
+		if (this.textContent === 'X' || this.textContent === 'O') {
+			alert("You can't do that!");
+		} else {
+			this.textContent = gameController.activePlayer.playerPiece;
+			gameObserver.notifyObservers(this);
+		}
 	}
 
-	function update(self) {
-		console.log(`${self} 'updated'`);
-		//
+	function updateWinCombos(self, cell) {
+		self.winningCombos.forEach(function(combo) {
+			combo.forEach(function(comboNumber) {
+				if (comboNumber == cell.id) {
+					const comboIndex = self.winningCombos.indexOf(combo);
+					const numberIndex = self.winningCombos[comboIndex].indexOf(comboNumber);
+					self.winningCombos[comboIndex][numberIndex] = cell.textContent;
+				}
+			});
+		});
 	}
 
-	return { boardCells, update };
+	function update(self, cell) {
+		updateWinCombos(self, cell);
+		// win check - scan all win combos - if all are same piece then active player is winner
+		// draw check - scan board - if no integers left - draw
+	}
+
+	return { boardCells, winningCombos, update };
 })();
 
 gameObserver.addObserver(gameBoard);
