@@ -10,14 +10,19 @@ const gameBoard = (function() {
 		[ 1, 5, 9 ],
 		[ 3, 5, 7 ]
 	];
+	const _resetGame = () => location.reload();
 
 	// cache DOM
 	const boardCells = Array.from(document.querySelectorAll('.cell'));
+	const resetButton = document.querySelector('#reset');
 
-	// bind click events to cells
+	// bind click events
+	// for cells
 	for (let i = 0; i < boardCells.length; i++) {
 		boardCells[i].addEventListener('click', takeCell);
 	}
+	// for buttons
+	resetButton.addEventListener('click', _resetGame);
 
 	_setupBoard();
 
@@ -58,13 +63,9 @@ const gameBoard = (function() {
 		self.cells.splice(index, 1);
 	}
 
-	function checkOWinner(cell) {
-		return cell === 'O';
-	}
+	const checkOWinner = (cell) => cell === 'O';
 
-	function checkXWinner(cell) {
-		return cell === 'X';
-	}
+	const checkXWinner = (cell) => cell === 'X';
 
 	function winCheck(self) {
 		let winCombo = [];
@@ -88,9 +89,11 @@ const gameBoard = (function() {
 		updateWinCombos(self, cell);
 		updateCells(self, cell);
 		if (typeof winCheck(self) === 'object') {
-			alert(`${gameController.activePlayer.playerName} is the winner!`); // demeter
+			alert(`${gameController.nextPlayer.playerName} is the winner!`); // demeter
+			_resetGame();
 		} else if (drawCheck(self)) {
 			alert("It's a draw!");
+			_resetGame();
 		}
 	}
 
@@ -99,7 +102,6 @@ const gameBoard = (function() {
 
 gameObserver.addObserver(gameBoard);
 
-// refresh display when game is a win/draw (now it only refreshes AFTER the alert)
 // Let players enter their names
 // Store name in local storage
 // Keep track of score?

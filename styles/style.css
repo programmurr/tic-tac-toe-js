@@ -22,6 +22,7 @@ h1 {
 }
 
 .game-board {
+	border: var(--border);
 	cursor: pointer;
 	margin: 0 auto;
 	height: 400px;
@@ -63,22 +64,17 @@ h1 {
 	border-left: var(--border);
 }
 
-/* .game-board {
-	width: 400px;
-	height: 400px;
-	margin: 0 auto;
-	background-color: black;
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	grid-template-rows: repeat(3, 1fr);
-	justify-items: center;
-	align-items: center;
-	grid-gap: 1px;
+.reset-button {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 30%;
+	text-align: center;
 }
 
-.cell {
-	background-color: white;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-} */
+#reset {
+	border: 1px solid black;
+	border-radius: 5px;
+	margin: 1rem 0 1rem 0;
+	padding: 5px 10px 5px 10px;
+}
