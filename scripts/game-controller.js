@@ -1,34 +1,36 @@
-const gameController = (function(player1, player2) {
-	let activePlayer = player1;
-	let nextPlayer = player2;
+const gameController = (function() {
 	let players = JSON.parse(localStorage.getItem('players') || '[]');
-	players = players.splice(0, 2);
 
-	// need to set players 1 and 2 to the players in the local storage object
+	let activePlayer;
+	let nextPlayer;
+	let player1;
+	let player2;
 
 	if (players.length === 0) {
-		player1.playerName = prompt('Player1 (X), please enter your name');
-		player2.playerName = prompt('Player2 (O), please enter your name');
+		player1 = Player(prompt("Player1, 'X', please enter your name"), 'X');
+		player2 = Player(prompt("Player2, 'O', please enter your name"), 'O');
+		players.push(player1);
+		players.push(player2);
+		_updateLocalStorage();
+		[ activePlayer, nextPlayer ] = [ player1, player2 ];
+	} else {
+		[ activePlayer, nextPlayer ] = [ players[0], players[1] ];
+		[ player1, player2 ] = [ players[0], players[1] ];
 	}
-
-	players.push(player1);
-	players.push(player2);
-
-	_updateLocalStorage();
 
 	function _updateLocalStorage() {
 		window['localStorage'].setItem('players', JSON.stringify(players));
 	}
 
-	function switchPlayer(self) {
+	function _switchPlayer(self) {
 		[ self.activePlayer, self.nextPlayer ] = [ self.nextPlayer, self.activePlayer ];
 	}
 
 	function update(self, _cell) {
-		switchPlayer(self);
+		_switchPlayer(self);
 	}
 
-	return { activePlayer, nextPlayer, update, players };
-})(player1, player2);
+	return { activePlayer, nextPlayer, update, player1, player2 };
+})();
 
 gameObserver.addObserver(gameController);

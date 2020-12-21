@@ -22,13 +22,12 @@ const gameBoard = (function() {
 	// bind click events
 	// for cells
 	for (let i = 0; i < boardCells.length; i++) {
-		boardCells[i].addEventListener('click', takeCell);
+		boardCells[i].addEventListener('click', _takeCell);
 	}
 	// for buttons
 	resetButton.addEventListener('click', _resetGame);
 
 	_setupBoard();
-	_getPlayerNames();
 	_displayPlayers();
 
 	function _setupBoard() {
@@ -37,18 +36,16 @@ const gameBoard = (function() {
 		}
 	}
 
-	function _getPlayerNames() {}
-
 	function _displayPlayers() {
-		player1Display.textContent = `${player1.playerName} is '${player1.playerPiece}'`;
-		player2Display.textContent = `${player2.playerName} is '${player2.playerPiece}'`;
+		player1Display.textContent = `${gameController.player1.playerName} is '${gameController.player1.playerPiece}'`;
+		player2Display.textContent = `${gameController.player2.playerName} is '${gameController.player2.playerPiece}'`;
 	}
 
 	function _refreshDisplay(cell) {
 		cell.textContent = gameController.activePlayer.playerPiece; // demeter
 	}
 
-	function takeCell() {
+	function _takeCell() {
 		if (this.textContent === 'X' || this.textContent === 'O') {
 			alert("You can't do that!");
 		} else {
@@ -109,11 +106,7 @@ const gameBoard = (function() {
 		}
 	}
 
-	return { cells, boardCells, winningCombos, update, boardContainer };
+	return { cells, boardCells, winningCombos, update };
 })();
 
 gameObserver.addObserver(gameBoard);
-
-// Let players enter their names
-// Store name in local storage
-// Tidy up code - remove demeter violations

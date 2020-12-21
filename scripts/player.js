@@ -4,6 +4,3 @@ const Player = (name, piece) => {
 
 	return { playerName, playerPiece };
 };
-
-const player1 = Player('Player1', 'X');
-const player2 = Player('Player2', 'O');
