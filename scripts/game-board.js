@@ -13,8 +13,11 @@ const gameBoard = (function() {
 	const _resetGame = () => location.reload();
 
 	// cache DOM
+	const boardContainer = document.querySelector('.board-container');
 	const boardCells = Array.from(document.querySelectorAll('.cell'));
-	const resetButton = document.querySelector('#reset');
+	const resetButton = boardContainer.children[1];
+	let player1Display = boardContainer.children[2].children[0];
+	let player2Display = boardContainer.children[2].children[1];
 
 	// bind click events
 	// for cells
@@ -25,11 +28,20 @@ const gameBoard = (function() {
 	resetButton.addEventListener('click', _resetGame);
 
 	_setupBoard();
+	_getPlayerNames();
+	_displayPlayers();
 
 	function _setupBoard() {
 		for (let i = 0; i < boardCells.length; i++) {
 			boardCells[i].textContent = cells[i];
 		}
+	}
+
+	function _getPlayerNames() {}
+
+	function _displayPlayers() {
+		player1Display.textContent = `${player1.playerName} is '${player1.playerPiece}'`;
+		player2Display.textContent = `${player2.playerName} is '${player2.playerPiece}'`;
 	}
 
 	function _refreshDisplay(cell) {
@@ -97,12 +109,11 @@ const gameBoard = (function() {
 		}
 	}
 
-	return { cells, boardCells, winningCombos, update };
+	return { cells, boardCells, winningCombos, update, boardContainer };
 })();
 
 gameObserver.addObserver(gameBoard);
 
 // Let players enter their names
 // Store name in local storage
-// Keep track of score?
 // Tidy up code - remove demeter violations
