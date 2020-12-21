@@ -4,5 +4,5 @@ An assignment from [The Odin Project](https://www.theodinproject.com/lessons/tic
 
 *"We're making a Tic Tac Toe game you can play in your browser!"*
 
-### Work in progress
-When it's finished, play it on [codepen](https://codepen.io/your-work)
+### Complete!
+Play it live on [repl.it](https://repl.it/@programmurr/ProgrammurrTTT)

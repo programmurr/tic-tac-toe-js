@@ -1,4 +1,4 @@
-const gameController = (function() {
+const playerController = (function() {
 	let players = JSON.parse(localStorage.getItem('players') || '[]');
 
 	let activePlayer;
@@ -33,4 +33,4 @@ const gameController = (function() {
 	return { activePlayer, nextPlayer, update, player1, player2 };
 })();
 
-gameObserver.addObserver(gameController);
+gameObserver.addObserver(playerController);

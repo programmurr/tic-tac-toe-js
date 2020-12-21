@@ -15,7 +15,8 @@ const gameBoard = (function() {
 	// cache DOM
 	const boardContainer = document.querySelector('.board-container');
 	const boardCells = Array.from(document.querySelectorAll('.cell'));
-	const resetButton = boardContainer.children[1];
+	const resetGameButton = boardContainer.children[1].children[0];
+	const resetNameButton = boardContainer.children[1].children[1];
 	let player1Display = boardContainer.children[2].children[0];
 	let player2Display = boardContainer.children[2].children[1];
 
@@ -25,7 +26,8 @@ const gameBoard = (function() {
 		boardCells[i].addEventListener('click', _takeCell);
 	}
 	// for buttons
-	resetButton.addEventListener('click', _resetGame);
+	resetGameButton.addEventListener('click', _resetGame);
+	resetNameButton.addEventListener('click', _resetName);
 
 	_setupBoard();
 	_displayPlayers();
@@ -37,12 +39,19 @@ const gameBoard = (function() {
 	}
 
 	function _displayPlayers() {
-		player1Display.textContent = `${gameController.player1.playerName} is '${gameController.player1.playerPiece}'`;
-		player2Display.textContent = `${gameController.player2.playerName} is '${gameController.player2.playerPiece}'`;
+		player1Display.textContent = `${playerController.player1.playerName} is '${playerController.player1
+			.playerPiece}'`;
+		player2Display.textContent = `${playerController.player2.playerName} is '${playerController.player2
+			.playerPiece}'`;
+	}
+
+	function _resetName() {
+		localStorage.clear();
+		location.reload();
 	}
 
 	function _refreshDisplay(cell) {
-		cell.textContent = gameController.activePlayer.playerPiece; // demeter
+		cell.textContent = playerController.activePlayer.playerPiece;
 	}
 
 	function _takeCell() {
@@ -54,7 +63,7 @@ const gameBoard = (function() {
 		}
 	}
 
-	function updateWinCombos(self, cell) {
+	function _updateWinCombos(self, cell) {
 		self.winningCombos.forEach(function(combo) {
 			combo.forEach(function(comboNumber) {
 				if (comboNumber == cell.id) {
@@ -66,27 +75,27 @@ const gameBoard = (function() {
 		});
 	}
 
-	function updateCells(self, clickedCell) {
+	function _updateCells(self, clickedCell) {
 		const cellIdNumber = parseInt(clickedCell.id);
 		const index = self.cells.indexOf(cellIdNumber);
 		self.cells.splice(index, 1);
 	}
 
-	const checkOWinner = (cell) => cell === 'O';
+	const _checkOWinner = (cell) => cell === 'O';
 
-	const checkXWinner = (cell) => cell === 'X';
+	const _checkXWinner = (cell) => cell === 'X';
 
-	function winCheck(self) {
+	function _winCheck(self) {
 		let winCombo = [];
 		for (let i = 0; i < self.winningCombos.length; i++) {
-			if (self.winningCombos[i].every(checkXWinner) || self.winningCombos[i].every(checkOWinner)) {
+			if (self.winningCombos[i].every(_checkXWinner) || self.winningCombos[i].every(_checkOWinner)) {
 				winCombo.push(self.winningCombos[i]);
 				return winCombo;
 			}
 		}
 	}
 
-	function drawCheck(self) {
+	function _drawCheck(self) {
 		if (self.cells.length === 0) {
 			return true;
 		} else {
@@ -95,12 +104,12 @@ const gameBoard = (function() {
 	}
 
 	function update(self, cell) {
-		updateWinCombos(self, cell);
-		updateCells(self, cell);
-		if (typeof winCheck(self) === 'object') {
-			alert(`${gameController.nextPlayer.playerName} is the winner!`); // demeter
+		_updateWinCombos(self, cell);
+		_updateCells(self, cell);
+		if (typeof _winCheck(self) === 'object') {
+			alert(`${playerController.nextPlayer.playerName} is the winner!`);
 			_resetGame();
-		} else if (drawCheck(self)) {
+		} else if (_drawCheck(self)) {
 			alert("It's a draw!");
 			_resetGame();
 		}
